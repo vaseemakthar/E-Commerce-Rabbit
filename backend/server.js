@@ -1,51 +1,64 @@
-const express = require("express")
-const cors =require("cors")
-const dotenv =require("dotenv")
-const connectDB =require("./config/db")
-const userRoutes = require("./routes/userRoutes")
-const productRoutes = require("./routes/productRoutes")
-const cartRoutes = require("./routes/cartRoutes")
-const checkoutRoutes = require("./routes/checkoutRoutes")
-const orderRoutes = require("./routes/orderRoutes")
-const uploadRoutes = require("./routes/uploadRoutes")
-const subscribeRoutes = require("./routes/subscriberRoutes")
-const adminRoutes=require("./routes/adminRoutes")
-const productAdminRoutes=require("./routes/productAdminRoutes")
-const adminOrderRoutes=require("./routes/adminOrderRoutes")
+// server.js
+const express = require("express");
+const cors = require("cors");
+const dotenv = require("dotenv");
+const path = require("path");
+const connectDB = require("./config/db");
 
-const app=express()
-app.use(express.json())
-app.use(cors())
+// Import routes
+const userRoutes = require("./routes/userRoutes");
+const productRoutes = require("./routes/productRoutes");
+const cartRoutes = require("./routes/cartRoutes");
+const checkoutRoutes = require("./routes/checkoutRoutes");
+const orderRoutes = require("./routes/orderRoutes");
+const uploadRoutes = require("./routes/uploadRoutes");
+const subscribeRoutes = require("./routes/subscriberRoutes");
+const adminRoutes = require("./routes/adminRoutes");
+const productAdminRoutes = require("./routes/productAdminRoutes");
+const adminOrderRoutes = require("./routes/adminOrderRoutes");
 
-// Serve static files from uploads folder
-app.use("/uploads", express.static("uploads"))
+// Load env variables
+dotenv.config();
 
-dotenv.config()
+const app = express();
 
-const dns=require("dns")
-dns.setServers(["8.8.8.8"])
+// Middleware
+app.use(express.json());
+app.use(cors());
 
-const PORT = process.env.PORT || 3000
+// Serve uploaded files
+app.use("/uploads", express.static("uploads"));
 
-connectDB()
+// Connect to MongoDB
+connectDB();
 
-app.get("/", (req, res)=>{
-    res.send("WELCOME TO MY API!")
-})
+// API Routes
+app.get("/", (req, res) => {
+  res.send("WELCOME TO MY API!");
+});
 
-app.use("/api/users", userRoutes)
-app.use("/api/products", productRoutes)
-app.use("/api/cart", cartRoutes)
-app.use("/api/checkout",checkoutRoutes)
-app.use("/api/orders",orderRoutes)
-app.use("/api/upload",uploadRoutes)
-app.use("/api",subscribeRoutes)
+app.use("/api/users", userRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/cart", cartRoutes);
+app.use("/api/checkout", checkoutRoutes);
+app.use("/api/orders", orderRoutes);
+app.use("/api/upload", uploadRoutes);
+app.use("/api", subscribeRoutes);
 
-//admin routes
-app.use("/api/admin/users/",adminRoutes)
-app.use("/api/admin/products/",productAdminRoutes)
-app.use("/api/admin/orders",adminOrderRoutes)
+// Admin routes
+app.use("/api/admin/users", adminRoutes);
+app.use("/api/admin/products", productAdminRoutes);
+app.use("/api/admin/orders", adminOrderRoutes);
 
-app.listen(PORT, ()=>{
-    console.log(`server is runnning on: http://localhost:${PORT}`)
-})
+// Serve frontend (SPA) after all API routes
+app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/dist", "index.html"));
+});
+
+// Start server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
