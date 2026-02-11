@@ -43,6 +43,7 @@ const AppContent = () => {
           <Route path="profile" element={<Profile />}/>
           <Route path="collections/:all" element={<CollectionPage/>}/>
           <Route path="product/:id" element={<ProductDetails />}/>
+          <Route path="collections/all/product/:id" element={<ProductDetails />}/>
           <Route path="checkout" element={<Checkout />}/>
           <Route path="order-confirmation" element={<OrderConfirmationPage />}></Route>
           <Route path="order/:id" element={<OrderDetailsPage />}></Route>
