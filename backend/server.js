@@ -58,3 +58,12 @@ app.use("/api/admin/orders",adminOrderRoutes)
 app.listen(PORT, ()=>{
     console.log(`server is runnning on: http://localhost:${PORT}`)
 })
+const path = require("path");
+
+// Serve frontend build folder
+app.use(express.static(path.join(__dirname, "../frontend/dist"))); // Adjust path if needed
+
+// SPA fallback: for any route not handled by API, serve index.html
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/dist", "index.html"));
+});
