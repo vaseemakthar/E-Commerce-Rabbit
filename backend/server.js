@@ -15,15 +15,16 @@ const adminOrderRoutes=require("./routes/adminOrderRoutes")
 
 const app=express()
 app.use(express.json())
-const corsOptions = {
-  origin: [
-    "https://e-commerce-rabbit-lxy9.vercel.app", // your frontend URL
-    "http://localhost:5173" // local dev
-  ],
-  credentials: true
-};
+// const corsOptions = {
+//   origin: [
+//     "https://e-commerce-rabbit-lxy9.vercel.app", // your frontend URL
+//     "http://localhost:5173" // local dev
+//   ],
+//   credentials: true
+// };
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
+app.use(cors({ origin: "*" }));
 
 // Serve static files from uploads folder
 app.use("/uploads", express.static("uploads"))
