@@ -17,7 +17,7 @@ const app=express()
 app.use(express.json())
 const corsOptions = {
   origin: [
-    "https://ecommerce-vaseem-akthars-projects.vercel.app", // your frontend URL
+    "https://e-commerce-rabbit-lxy9.vercel.app", // your frontend URL
     "http://localhost:5173" // local dev
   ],
   credentials: true
